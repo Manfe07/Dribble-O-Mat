@@ -18,6 +18,7 @@
 
 const char *ssid = "Einhornzuchtstation"; // Replace with your network SSID
 const char *password = "hackerspace";
+const char* hostname = "Dribble-O-Mat";
 
 // Json Variable to Hold Sensor Readings
 DynamicJsonDocument readings(1024);
@@ -61,6 +62,7 @@ void initLittleFS()
 void initWiFi()
 {
   WiFi.mode(WIFI_STA);
+  WiFi.setHostname(hostname);
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi ..");
   while (WiFi.status() != WL_CONNECTED)
