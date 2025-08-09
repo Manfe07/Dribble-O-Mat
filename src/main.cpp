@@ -1,7 +1,7 @@
 // Basic demo for accelerometer readings from Adafruit MPU6050
 #include <Arduino.h>
 
-#include <countdown.h>
+#include "countdown.h"
 
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
