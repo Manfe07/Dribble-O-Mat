@@ -7,11 +7,13 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
+
 #include <WiFi.h>
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "LittleFS.h"
 #include <ArduinoJson.h>
+
 
 // #define SDA_PIN GPIO_NUM_33 // Default SDA pin for ESP32
 // #define SCL_PIN GPIO_NUM_35 // Default SCL pin for ESP32
@@ -27,7 +29,7 @@ Countdown countdown(60000); // Countdown timer for 1 second
 
 Adafruit_MPU6050 mpu;
 uint8_t LED = GPIO_NUM_15;    // Pin for the onboard LED
-uint8_t IntPin = GPIO_NUM_37; // Pin for the onboard LED
+uint8_t buttonPin = GPIO_NUM_37; // Pin for the button
 
 AsyncWebServer server(80);
 static AsyncWebSocket ws("/ws");
@@ -125,7 +127,7 @@ void setup(void)
   Serial.begin(115200);
 
   pinMode(LED, OUTPUT);   // Set LED pin as output
-  pinMode(IntPin, INPUT); // Set interrupt pin as input
+  pinMode(buttonPin, INPUT_PULLUP); // Set interrupt pin as input
 
   while (!mpu.begin())
   {
@@ -189,12 +191,22 @@ void loop()
 {
   ulong currentMillis = millis();
 
+  if (digitalRead(buttonPin) == LOW)
+  {
+    if (!countdown.isRunning())
+    {
+      countdown.start(); // Start the countdown if it is not running
+      counter = 0;       // Reset the motion counter
+      Serial.println("Countdown started");
+    }
+  }
+
   if (mpu.getMotionInterruptStatus())
   {
     if (currentMillis - lastMotion > motionTimeout)
     {
       lastMotion = currentMillis;
-      nextCall = currentMillis + 200; // Reset nextCall to avoid immediate re-triggering
+      nextCall = currentMillis + 100; // Reset nextCall to avoid immediate re-triggering
       if (countdown.isRunning())
       {
         counter++; // Increment the motion counter
@@ -210,7 +222,10 @@ void loop()
 
   if (nextCall < currentMillis)
   {
-    nextCall = currentMillis + 1000;       // Call every second
+    if (countdown.isRunning())
+      nextCall = currentMillis + 100; // If countdown is running, check every 200 ms
+    else
+      nextCall = currentMillis + 1000; // Otherwise, check every second
     notifyClients(getSensorReadings());
     digitalWrite(LED, !digitalRead(LED)); // Turn on the LED to indicate failure
   }
