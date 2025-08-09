@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Dribble-O-Mat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <script src="script.js"></script>
+        <div class="topnav">
+            <h1>SENSOR READINGS (WEBSOCKET)</h1>
+        </div>
+        <div class="content">
+            <div class="card-grid">
+                <div class="card">
+                    <p class="card-title">Start</p>
+                    <button id="startBtn" onclick='startBtn()'>Start</button>
+                </div>
+                <div class="card">
+                    <p class="card-title">Punkte</p>
+                    <p class="reading"><span id="counter"></span></p>
+                </div>
+                <div class="card">
+                    <p class="card-title">Zeit</p>
+                    <p class="reading"><span id="countdown"></span></p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
