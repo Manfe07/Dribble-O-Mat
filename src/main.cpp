@@ -162,14 +162,6 @@ void setup(void)
       Serial.println("Request for index.html");
       request->send(LittleFS, "/index.html", "text/html"); });
 
-  server.on("/start", HTTP_GET, [](AsyncWebServerRequest *request)
-            { 
-              counter = 0; // Reset the motion counter
-              countdown.set(60000); // Set countdown to 60 seconds
-              countdown.start(); // Set countdown to 60 seconds
-      request->send(200, "text/plain", "Hello, world");
-      Serial.println("Request to start start countdown"); });
-
   server.on("/settings", HTTP_GET, [](AsyncWebServerRequest *request)
             { 
       Serial.println("Request for index.html");
@@ -206,7 +198,7 @@ void loop()
     if (currentMillis - lastMotion > motionTimeout)
     {
       lastMotion = currentMillis;
-      nextCall = currentMillis + 100; // Reset nextCall to avoid immediate re-triggering
+      nextCall = currentMillis + 200; // Reset nextCall to avoid immediate re-triggering
       if (countdown.isRunning())
       {
         counter++; // Increment the motion counter
@@ -223,7 +215,7 @@ void loop()
   if (nextCall < currentMillis)
   {
     if (countdown.isRunning())
-      nextCall = currentMillis + 100; // If countdown is running, check every 200 ms
+      nextCall = currentMillis + 500; // If countdown is running, check every 200 ms
     else
       nextCall = currentMillis + 1000; // Otherwise, check every second
     notifyClients(getSensorReadings());

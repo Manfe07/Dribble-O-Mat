@@ -7,24 +7,17 @@
     </head>
     <body>
         <script src="script.js"></script>
-        <div class="topnav">
-            <h1>SENSOR READINGS (WEBSOCKET)</h1>
-        </div>
-        <div class="content">
-            <div class="card-grid">
-                <div class="card">
-                    <p class="card-title">Start</p>
-                    <button id="startBtn" onclick='startBtn()'>Start</button>
-                </div>
-                <div class="card">
-                    <p class="card-title">Punkte</p>
-                    <p class="reading"><span id="counter"></span></p>
-                </div>
-                <div class="card">
-                    <p class="card-title">Zeit</p>
-                    <p class="reading"><span id="countdown"></span></p>
-                </div>
+        <div class="container">
+            <div class="half zeit">
+                <div class="label">Restzeit</div>
+                <div class="value" id="countdown">99</div>
+            </div>
+            <div class="half punkte">
+                <div class="label">Punkte</div>
+                <div class="value" id="counter">999</div>
             </div>
         </div>
     </body>
+     <style>
+        </style>
 </html>

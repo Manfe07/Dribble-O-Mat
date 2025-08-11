@@ -31,11 +31,6 @@ function onClose(event) {
     setTimeout(initWebSocket, 2000);
 }
 
-function startBtn() {
-    Request = new XMLHttpRequest();
-    Request.open("GET", "/start", true);
-}
-
 // Function that receives the message from the ESP32 with the readings
 function onMessage(event) {
     console.log(event.data);
