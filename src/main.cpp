@@ -2,6 +2,8 @@
 #include <Arduino.h>
 
 #include "countdown.h"
+#include "secret.h" // Include your secret credentials here or in a separate file
+
 
 #include <Adafruit_MPU6050.h>
 #include <Adafruit_Sensor.h>
@@ -18,8 +20,6 @@
 // #define SDA_PIN GPIO_NUM_33 // Default SDA pin for ESP32
 // #define SCL_PIN GPIO_NUM_35 // Default SCL pin for ESP32
 
-const char *ssid = "Einhornzuchtstation"; // Replace with your network SSID
-const char *password = "hackerspace";
 const char* hostname = "Dribble-O-Mat";
 
 // Json Variable to Hold Sensor Readings
@@ -40,6 +40,7 @@ unsigned long timerDelay = 30000;
 
 uint16_t counter = 0; // Counter for motion detection
 
+
 String getSensorReadings()
 {
   readings["counter"] = String(counter);
@@ -48,6 +49,7 @@ String getSensorReadings()
   serializeJson(readings, jsonString);
   return jsonString;
 }
+
 
 // Initialize LittleFS
 // This function mounts the LittleFS filesystem and checks for errors
@@ -60,20 +62,15 @@ void initLittleFS()
   Serial.println("LittleFS mounted successfully");
 }
 
+
 // Initialize WiFi
 void initWiFi()
 {
-  WiFi.mode(WIFI_STA);
-  WiFi.setHostname(hostname);
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting to WiFi ..");
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    Serial.print('.');
-    delay(1000);
-  }
-  Serial.println(WiFi.localIP());
+  WiFi.mode(WIFI_AP_STA);  // Enable both AP and Station modes
+  WiFi.softAP(ap_ssid, ap_password);  // Start the access point
+  WiFi.begin(sta_ssid, sta_password); // Connect to existing network
 }
+
 
 void notifyClients(String sensorReadings)
 {
@@ -129,6 +126,9 @@ void setup(void)
   pinMode(LED, OUTPUT);   // Set LED pin as output
   pinMode(buttonPin, INPUT_PULLUP); // Set interrupt pin as input
 
+  initWiFi();
+
+
   while (!mpu.begin())
   {
     digitalWrite(LED, HIGH);
@@ -150,7 +150,6 @@ void setup(void)
   mpu.setInterruptPinPolarity(false); // Active HIGH
   mpu.setMotionInterrupt(true);
 
-  initWiFi();
   initLittleFS();
   initWebSocket();
 
