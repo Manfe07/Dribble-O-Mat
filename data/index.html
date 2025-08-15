@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
     <head>
         <title>Dribble-O-Mat</title>
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
@@ -9,12 +10,19 @@
         <script src="script.js"></script>
         <div class="container">
             <div class="half zeit">
-                <div class="label">Restzeit</div>
+                <div class="label" id="mode">Restzeit</div>
                 <div class="value" id="countdown">99</div>
             </div>
             <div class="half punkte">
                 <div class="label">Punkte</div>
                 <div class="value" id="counter">999</div>
+            </div>
+        </div>
+        <!-- Popup für Verbindungsverlust -->
+        <div id="connection-lost-popup" class="connection-lost-popup" style="display:none;">
+            <div class="popup-box">
+                <div class="popup-msg">Verbindung verloren!</div>
+                <button class="popup-btn" onclick="location.reload()">Seite neu laden</button>
             </div>
         </div>
     </body>
